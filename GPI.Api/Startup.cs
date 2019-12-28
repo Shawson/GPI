@@ -1,3 +1,4 @@
+using AutoMapper;
 using GPI.Data;
 using GPI.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace GPI.Api
 {
@@ -35,7 +37,13 @@ namespace GPI.Api
                 //options.UseSqlServer(Configuration.GetConnectionString("Default"), x => x.MigrationsAssembly("GPI.Data")));
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "GPI", Version = "v1" });
+            });
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +63,13 @@ namespace GPI.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.RoutePrefix = "";
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "GPI Api V1");
             });
         }
     }

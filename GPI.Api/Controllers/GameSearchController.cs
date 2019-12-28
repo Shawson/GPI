@@ -18,15 +18,13 @@ namespace GPI.Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        [Route("/")]
+        [HttpGet("")]
         public IEnumerable<Game> Get()
         {
             return Get(50, 1);
         }
 
-        [HttpGet]
-        [Route("/{pageSize}-{currentPage}")]
+        [HttpGet("{pageSize}-{currentPage}")]
         public IEnumerable<Game> Get(int pageSize, int currentPage)
         {
             return new List<Game> { new Game() };

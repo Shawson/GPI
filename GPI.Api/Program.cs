@@ -1,4 +1,6 @@
+using GPI.Api.BackgroundServices;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace GPI.Api
@@ -15,6 +17,11 @@ namespace GPI.Api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureServices(services =>
+                {
+                    services.AddHostedService<QueuedHostedService>();
+                    services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
                 });
     }
 }

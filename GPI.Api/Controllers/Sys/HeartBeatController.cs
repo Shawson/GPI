@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GPI.Core.Models.Entities;
+using GPI.Data.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GPI.Api.Controllers.Sys
 {

@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\Commands\" />
-    <Folder Include="CQRS\Queries\" />
+    <ProjectReference Include="..\GPI.Core\GPI.Core.csproj" />
+    <ProjectReference Include="..\GPI.Data\GPI.Data.csproj" />
   </ItemGroup>
 
 </Project>

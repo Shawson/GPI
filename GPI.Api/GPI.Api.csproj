@@ -28,6 +28,4 @@
     <ProjectReference Include="..\GPI.Data\GPI.Data.csproj" />
     <ProjectReference Include="..\GPI.Services\GPI.Services.csproj" />
   </ItemGroup>
-
-
 </Project>

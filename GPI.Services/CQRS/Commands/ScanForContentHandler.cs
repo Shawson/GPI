@@ -30,6 +30,14 @@ namespace GPI.Services.CQRS.Commands
 
         public Task<Unit> Handle(ScanForContentRequest request, CancellationToken cancellationToken)
         {
+            // get all scanners
+
+            // load and deserialise their json config files
+
+            // add each of them to the background task queue
+
+            // maybe add a fake task to the queue which encompasses all the scanners we need to run?
+
             _backgroundTaskQueue.QueueBackgroundWorkItem(async token =>
             {
                 // Simulate three 5-second tasks to complete

@@ -27,7 +27,6 @@ namespace GPI.Services.CQRS.Commands
            _backgroundTaskProgressTracker = backgroundTaskProgressTracker;
         }
 
-
         public Task<Unit> Handle(ScanForContentRequest request, CancellationToken cancellationToken)
         {
             // get all scanners
@@ -40,6 +39,8 @@ namespace GPI.Services.CQRS.Commands
 
             _backgroundTaskQueue.QueueBackgroundWorkItem(async token =>
             {
+
+                
                 // Simulate three 5-second tasks to complete
                 // for each enqueued work item
 

@@ -8,9 +8,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GPI.Services.ContentScanners
+namespace GPI.Services.ContentHosts
 {
-    public class FileSystem : IContentScanner<FileSystemConfig>
+    public class NoHost : IContentHost<FileSystemConfig>
     {
         private readonly IDirectoryShim _directory;
 
@@ -18,9 +18,11 @@ namespace GPI.Services.ContentScanners
         public Guid DefaultPlatformIdentifier { get; } = GuidHelper.Platforms.None;
         public FileSystemConfig Settings { get; set; }
 
-        public FileSystem(IDirectoryShim directory)
+        public string Title => "";
+
+        public NoHost(IDirectoryShim directory)
         {
-            this._directory = directory;
+            _directory = directory;
         }
 
         public Task<List<GameInfo>> ScanForGames(Dictionary<string, string> config, CancellationToken token)
@@ -42,6 +44,11 @@ namespace GPI.Services.ContentScanners
             }
 
             return Task.FromResult(results);
+        }
+
+        public Task LaunchGame(Guid gameId)
+        {
+            throw new NotImplementedException();
         }
     }
 

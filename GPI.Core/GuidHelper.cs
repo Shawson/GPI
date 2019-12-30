@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GPI.Services.ContentScanners
+namespace GPI.Core
 {
     public static class GuidHelper
     {

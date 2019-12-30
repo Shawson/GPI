@@ -9,6 +9,7 @@ namespace GPI.Data
         public DbSet<Game> Games { get; set; }
         public DbSet<Hoster> Hosters { get; set; }
         public DbSet<Platform> Platforms { get; set; }
+        public DbSet<Launcher> Launchers { get; set; }
         public DbSet<GameAlias> GameAliases { get; set; }
         public DbSet<PlatformAlias> PlatformAliases { get; set; }
         public DbSet<ThirdParty> ThirdParties { get; set; }
@@ -23,6 +24,7 @@ namespace GPI.Data
             builder.ApplyConfiguration(new GameConfiguration());
             builder.ApplyConfiguration(new HosterConfiguration());
             builder.ApplyConfiguration(new PlatformConfiguration());
+            builder.ApplyConfiguration(new LauncherConfiguration());
             builder.ApplyConfiguration(new AliasConfiguration());
             builder.ApplyConfiguration(new GameAliasConfiguration());
             builder.ApplyConfiguration(new PlatformAliasConfiguration());

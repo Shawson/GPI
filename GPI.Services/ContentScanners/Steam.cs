@@ -1,4 +1,5 @@
-﻿using GPI.Core.Models.DTOs;
+﻿using GPI.Core;
+using GPI.Core.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;

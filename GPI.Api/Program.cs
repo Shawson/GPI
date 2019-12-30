@@ -22,6 +22,8 @@ namespace GPI.Api
                 .ConfigureServices(services =>
                 {
                     services.AddHostedService<LifetimeEventsHostedService>();
+
+                    // setup background task runner
                     services.AddHostedService<QueuedHostedService>();
                     services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
                     services.AddSingleton<IBackgroundTaskProgressTracker, BackgroundTaskProgressTracker>();

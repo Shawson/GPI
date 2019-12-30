@@ -37,10 +37,10 @@ namespace GPI.Api.SwaggerConfig
         {
             var info = new OpenApiInfo()
             {
-                Title = "Sample API",
+                Title = "GPI",
                 Version = description.ApiVersion.ToString(),
-                Description = "A sample application with Swagger, Swashbuckle, and API versioning.",
-                Contact = new OpenApiContact() { Name = "Bill Mei", Email = "bill.mei@somewhere.com" },
+                Description = "a REST JSON API allowing front end apps to interact with game library services",
+                Contact = new OpenApiContact() { Name = "Shaw Young", Email = "shawson@gmail.com" },
                 License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
             };
 

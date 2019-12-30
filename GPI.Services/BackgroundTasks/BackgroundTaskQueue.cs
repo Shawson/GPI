@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GPI.Api.BackgroundServices
+namespace GPI.Services.BackgroundTasks
 {
     public class BackgroundTaskQueue : IBackgroundTaskQueue
     {
@@ -18,7 +18,7 @@ namespace GPI.Api.BackgroundServices
             {
                 throw new ArgumentNullException(nameof(workItem));
             }
-            
+
             _workItems.Enqueue(workItem);
             _signal.Release();
         }

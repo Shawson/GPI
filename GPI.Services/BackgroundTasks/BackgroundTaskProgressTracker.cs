@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace GPI.Api.BackgroundServices
+namespace GPI.Services.BackgroundTasks
 {
     public class BackgroundTaskProgressTracker : IBackgroundTaskProgressTracker
     {

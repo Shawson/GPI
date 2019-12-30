@@ -1,5 +1,6 @@
 using GPI.Api.AppStart;
 using GPI.Api.BackgroundServices;
+using GPI.Services.BackgroundTasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

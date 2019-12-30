@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace GPI.Api.BackgroundServices
+namespace GPI.Services.BackgroundTasks
 {
     public interface IBackgroundTaskProgressTracker
     {

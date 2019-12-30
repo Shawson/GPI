@@ -2,6 +2,7 @@
 using GPI.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace GPI.Api.Controllers.Sys
 {
@@ -11,9 +12,9 @@ namespace GPI.Api.Controllers.Sys
     public class HeartBeatController : ControllerBase
     {
         [HttpGet]
-        public bool Get()
+        public string Get()
         {
-            return true;
+            return DateTime.UtcNow.ToString();
         }
     }
 }

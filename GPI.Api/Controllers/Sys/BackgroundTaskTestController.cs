@@ -1,5 +1,5 @@
-﻿using GPI.Api.BackgroundServices;
-using GPI.Core.Models.DTOs;
+﻿using GPI.Core.Models.DTOs;
+using GPI.Services.BackgroundTasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -31,56 +31,6 @@ namespace GPI.Api.Controllers.Sys
         public ActionResult<List<BackgroundTaskStatus>> Get()
         {
             return _taskTracker.GetActiveBackgroundTasks();
-        }
-
-        [HttpPost]
-        public bool Post()
-        {
-            _taskQueue.QueueBackgroundWorkItem(async token =>
-            {
-                // Simulate three 5-second tasks to complete
-                // for each enqueued work item
-
-                int delayLoop = 0;
-                var guid = Guid.NewGuid().ToString();
-
-                _taskTracker.AddTaskToTrack("DemoTask", token);
-
-                _logger.LogInformation(
-                    "Queued Background Task {Guid} is starting.", guid);
-
-                while (!token.IsCancellationRequested && delayLoop < 3)
-                {
-                    try
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(5), token);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        // Prevent throwing if the Delay is cancelled
-                    }
-
-                    delayLoop++;
-
-                    _taskTracker.UpdateTask("DemoTask", (decimal)delayLoop / (decimal)3);
-
-                    _logger.LogInformation(
-                        "Queued Background Task {Guid} is running. " +
-                        "{DelayLoop}/3", guid, delayLoop);
-                }
-
-                if (delayLoop == 3)
-                {
-                    _logger.LogInformation(
-                        "Queued Background Task {Guid} is complete.", guid);
-                }
-                else
-                {
-                    _logger.LogInformation(
-                        "Queued Background Task {Guid} was cancelled.", guid);
-                }
-            });
-            return true;
         }
     }
 }

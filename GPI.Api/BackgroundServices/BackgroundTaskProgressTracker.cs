@@ -2,18 +2,27 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace GPI.Api.BackgroundServices
 {
     public class BackgroundTaskProgressTracker : IBackgroundTaskProgressTracker
     {
         private ConcurrentDictionary<string, decimal> _workUnderway = new ConcurrentDictionary<string, decimal>();
+        private ConcurrentDictionary<string, CancellationToken> _tokenStore = new ConcurrentDictionary<string, CancellationToken>();
 
-        public void ReportWork(string jobName, decimal progress)
+        public void AddTaskToTrack(string jobName, CancellationToken token)
+        {
+            _workUnderway.AddOrUpdate(jobName, 0, (key, oldValue) => 0);
+            _tokenStore.AddOrUpdate(jobName, token, (key, oldValue) => token);
+        }
+
+        public void UpdateTask(string jobName, decimal progress)
         {
             if (progress == 1)
             {
                 _workUnderway.TryRemove(jobName, out _);
+                _tokenStore.TryRemove(jobName, out _);
             }
             else
             {

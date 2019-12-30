@@ -1,3 +1,4 @@
+using GPI.Api.AppStart;
 using GPI.Api.BackgroundServices;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ namespace GPI.Api
                 })
                 .ConfigureServices(services =>
                 {
+                    services.AddHostedService<LifetimeEventsHostedService>();
                     services.AddHostedService<QueuedHostedService>();
                     services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
                     services.AddSingleton<IBackgroundTaskProgressTracker, BackgroundTaskProgressTracker>();

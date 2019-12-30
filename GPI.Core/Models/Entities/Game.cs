@@ -23,7 +23,15 @@ namespace GPI.Core.Models.Entities
         /// Used to identify scanner used to import this content.  Null if no scanner was used
         /// </summary>
         public Guid? ScannerId { get; set; }
+
+        /// <summary>
+        /// Used to identify the platform for this game Eg; PC/ SNES/ OCULUS
+        /// </summary>
         public Guid PlatformId { get; set; }
+
+        /// <summary>
+        /// Identifies the content hoster Eg; Steam/ Oculus/ UPlay/ None (File System)
+        /// </summary>
         public Guid HosterId { get; set; }
 
         public ContentScanner ContentScanner { get; set; }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using GPI.Api.AppStart;
 using GPI.Api.SwaggerConfig;
 using GPI.Data;
 using GPI.Data.Repositories;
@@ -29,7 +30,6 @@ namespace GPI.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -68,12 +68,13 @@ namespace GPI.Api
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(DbContext), typeof(GPIDbContext));
 
+            services.AddScoped<IApplicationStartWorker, AppStartWorker>();
+
             services.AddAutoMapper(typeof(Startup));
 
             services.AddMediatR(typeof(RetrieveGameHandler).GetTypeInfo().Assembly);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

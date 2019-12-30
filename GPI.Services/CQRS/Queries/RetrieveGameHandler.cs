@@ -19,15 +19,15 @@ namespace GPI.Services.CQRS.Queries
 
     public class RetrieveGameHandler : IRequestHandler<RetrieveGameRequest, Game>
     {
-        private readonly IRepository<Game> gameRepository;
+        private readonly IRepository<Game> _gameRepository;
 
         public RetrieveGameHandler(IRepository<Game> gameRepository)
         {
-            this.gameRepository = gameRepository;
+            this._gameRepository = gameRepository;
         }
         public async Task<Game> Handle(RetrieveGameRequest request, CancellationToken cancellationToken)
         {
-            return await gameRepository.GetByIdAsync(request.GameId);
+            return await _gameRepository.GetByIdAsync(request.GameId);
         }
     }
 }

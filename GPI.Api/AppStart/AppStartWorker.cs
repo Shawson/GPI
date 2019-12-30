@@ -1,41 +1,36 @@
 ﻿using GPI.Api.BackgroundServices;
-using GPI.Core.Models.DTOs;
-using Microsoft.AspNetCore.Mvc;
+using GPI.Core.Models.Entities;
+using GPI.Data.Repositories;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GPI.Api.Controllers.Sys
+namespace GPI.Api.AppStart
 {
-    [ApiVersion("1.0")]
-    [ApiController]
-    [Route("api/v{v:apiVersion}/[controller]")]
-    public class BackgroundTaskTestController : ControllerBase
+    internal class AppStartWorker : IApplicationStartWorker
     {
+        private readonly ILogger<AppStartWorker> _logger;
+        private readonly IRepository<Game> _gameRepository;
         private readonly IBackgroundTaskQueue _taskQueue;
-        private readonly IBackgroundTaskProgressTracker _taskTracker;
-        private readonly ILogger<BackgroundTaskTestController> _logger;
+        private readonly IBackgroundTaskProgressTracker _progressTracker;
 
-        public BackgroundTaskTestController(
+        public AppStartWorker(
+            ILogger<AppStartWorker> logger, 
+            IRepository<Game> gameRepository,
             IBackgroundTaskQueue taskQueue,
-            IBackgroundTaskProgressTracker taskTracker,
-            ILogger<BackgroundTaskTestController> logger)
+            IBackgroundTaskProgressTracker progressTracker)
         {
-            this._taskQueue = taskQueue;
-            this._taskTracker = taskTracker;
-            this._logger = logger;
+            _logger = logger;
+            _gameRepository = gameRepository;
+            _taskQueue = taskQueue;
+            _progressTracker = progressTracker;
         }
 
-        [HttpGet]
-        public ActionResult<List<BackgroundTaskStatus>> Get()
+        public Task DoWork()
         {
-            return _taskTracker.GetActiveBackgroundTasks();
-        }
+            
+            _logger.LogInformation("Running");
 
-        [HttpPost]
-        public bool Post()
-        {
             _taskQueue.QueueBackgroundWorkItem(async token =>
             {
                 // Simulate three 5-second tasks to complete
@@ -44,7 +39,7 @@ namespace GPI.Api.Controllers.Sys
                 int delayLoop = 0;
                 var guid = Guid.NewGuid().ToString();
 
-                _taskTracker.AddTaskToTrack("DemoTask", token);
+                _progressTracker.AddTaskToTrack("DemoTask", token);
 
                 _logger.LogInformation(
                     "Queued Background Task {Guid} is starting.", guid);
@@ -62,7 +57,7 @@ namespace GPI.Api.Controllers.Sys
 
                     delayLoop++;
 
-                    _taskTracker.UpdateTask("DemoTask", (decimal)delayLoop / (decimal)3);
+                    _progressTracker.UpdateTask("DemoTask", (decimal)delayLoop / (decimal)3);
 
                     _logger.LogInformation(
                         "Queued Background Task {Guid} is running. " +
@@ -80,7 +75,8 @@ namespace GPI.Api.Controllers.Sys
                         "Queued Background Task {Guid} was cancelled.", guid);
                 }
             });
-            return true;
+
+            return null;
         }
     }
 }

@@ -21,11 +21,11 @@ namespace GPI.Services.CQRS.Commands
     }
     public class UpsertGameHandler : IRequestHandler<UpsertGameRequest, Game>
     {
-        private readonly IRepository<Game> gameRepository;
+        private readonly IRepository<Game> _gameRepository;
 
         public UpsertGameHandler(IRepository<Game> gameRepository)
         {
-            this.gameRepository = gameRepository;
+            this._gameRepository = gameRepository;
         }
 
         public async Task<Game> Handle(UpsertGameRequest request, CancellationToken cancellationToken)
@@ -34,11 +34,11 @@ namespace GPI.Services.CQRS.Commands
 
             if (request.Game.Id == Guid.Empty)
             {
-                await gameRepository.AddAsync(request.Game);
+                await _gameRepository.AddAsync(request.Game);
             }
             else
             {
-                var game = gameRepository.GetByIdAsync(request.Game.Id);
+                var game = _gameRepository.GetByIdAsync(request.Game.Id);
 
                 //game.
             }

@@ -22,6 +22,7 @@ namespace GPI.Api
                 {
                     services.AddHostedService<QueuedHostedService>();
                     services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+                    services.AddSingleton<IBackgroundTaskProgressTracker, BackgroundTaskProgressTracker>();
                 });
     }
 }

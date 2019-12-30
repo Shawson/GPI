@@ -18,7 +18,7 @@ namespace GPI.Api.BackgroundServices
             {
                 throw new ArgumentNullException(nameof(workItem));
             }
-
+            
             _workItems.Enqueue(workItem);
             _signal.Release();
         }

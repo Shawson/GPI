@@ -1,7 +1,9 @@
 ﻿using GPI.Api.BackgroundServices;
+using GPI.Core.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GPI.Api.Controllers.Sys
@@ -12,17 +14,27 @@ namespace GPI.Api.Controllers.Sys
     public class BackgroundTaskTestController : ControllerBase
     {
         private readonly IBackgroundTaskQueue taskQueue;
+        private readonly IBackgroundTaskProgressTracker taskTracker;
         private readonly ILogger<BackgroundTaskTestController> logger;
 
         public BackgroundTaskTestController(
             IBackgroundTaskQueue taskQueue,
+            IBackgroundTaskProgressTracker taskTracker,
             ILogger<BackgroundTaskTestController> logger)
         {
             this.taskQueue = taskQueue;
+            this.taskTracker = taskTracker;
             this.logger = logger;
         }
+
         [HttpGet]
-        public bool Get()
+        public ActionResult<List<BackgroundTaskStatus>> Get()
+        {
+            return taskTracker.GetActiveBackgroundTasks();
+        }
+
+        [HttpPost]
+        public bool Post()
         {
             taskQueue.QueueBackgroundWorkItem(async token =>
             {
@@ -31,6 +43,8 @@ namespace GPI.Api.Controllers.Sys
 
                 int delayLoop = 0;
                 var guid = Guid.NewGuid().ToString();
+
+                taskTracker.ReportWork("DemoTask", 0);
 
                 logger.LogInformation(
                     "Queued Background Task {Guid} is starting.", guid);
@@ -47,6 +61,8 @@ namespace GPI.Api.Controllers.Sys
                     }
 
                     delayLoop++;
+
+                    taskTracker.ReportWork("DemoTask", (decimal)delayLoop / (decimal)3);
 
                     logger.LogInformation(
                         "Queued Background Task {Guid} is running. " +

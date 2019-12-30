@@ -12,7 +12,7 @@ namespace GPI.Services.ContentScanners
     {
         public Guid HosterIdentifier { get; } = GuidHelper.Hosters.Steam;
         public Guid DefaultPlatformIdentifier { get; } = GuidHelper.Platforms.PC;
-        public SteamConfig Settings { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public SteamConfig Settings { get; set; } = null;
 
         public Task<List<GameInfo>> ScanForGames(Dictionary<string, string> config, CancellationToken token)
         {

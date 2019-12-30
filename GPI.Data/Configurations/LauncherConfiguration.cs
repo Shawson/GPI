@@ -17,11 +17,6 @@ namespace GPI.Data.Configurations
                 .HasMaxLength(50);
 
             builder
-                .HasOne(m => m.Hoster)
-                .WithMany(m => m.Launchers)
-                .HasForeignKey(m => m.HosterId);
-
-            builder
                 .HasOne(m => m.Platform)
                 .WithMany(m => m.Launchers)
                 .HasForeignKey(m => m.PlatformId);

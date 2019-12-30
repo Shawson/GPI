@@ -34,7 +34,6 @@ namespace GPI.Core.Models.Entities
         /// </summary>
         public Guid HosterId { get; set; }
 
-        public ContentScanner ContentScanner { get; set; }
         public Hoster Hoster { get; set; }
         public Platform Platform { get; set; }
         public IEnumerable<GameAlias> GameAliases { get; set; }

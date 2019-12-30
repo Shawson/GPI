@@ -13,7 +13,6 @@ namespace GPI.Data
         public DbSet<GameAlias> GameAliases { get; set; }
         public DbSet<PlatformAlias> PlatformAliases { get; set; }
         public DbSet<ThirdParty> ThirdParties { get; set; }
-        public DbSet<ContentScanner> ContentScanners { get; set; }
 
         public GPIDbContext(DbContextOptions<GPIDbContext> options)
             : base(options)

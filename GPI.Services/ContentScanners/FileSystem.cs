@@ -16,7 +16,7 @@ namespace GPI.Services.ContentScanners
 
         public Guid HosterIdentifier { get; } = GuidHelper.Hosters.None;
         public Guid DefaultPlatformIdentifier { get; } = GuidHelper.Platforms.None;
-        public FileSystemConfig Settings { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public FileSystemConfig Settings { get; set; }
 
         public FileSystem(IDirectoryShim directory)
         {

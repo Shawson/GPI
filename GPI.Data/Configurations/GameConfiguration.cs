@@ -23,11 +23,6 @@ namespace GPI.Data.Configurations
                 .HasMaxLength(512);
 
             builder
-                .HasOne(m => m.ContentScanner)
-                .WithMany(a => a.Games)
-                .HasForeignKey(m => m.ScannerId);
-
-            builder
                 .HasOne(m => m.Hoster)
                 .WithMany(a => a.Games)
                 .HasForeignKey(m => m.HosterId);

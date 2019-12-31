@@ -30,7 +30,7 @@ namespace GPI.Services.ContentHosts
             _directory = directory;
         }
 
-        public Task<List<GameInfo>> ScanForGames(Dictionary<string, string> config, CancellationToken token)
+        public Task<List<GameInfo>> ScanForGames(CancellationToken token)
         {
             List<GameInfo> results = new List<GameInfo>();
 

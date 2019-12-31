@@ -10,8 +10,12 @@ namespace GPI.Data.Configurations
         public void Configure(EntityTypeBuilder<Hoster> builder)
         {
             builder
-                .HasKey(a => a.Id);
-               
+                .HasKey(m => m.Id);
+
+            builder
+                .Property(m => m.DateAdded)
+                .HasDefaultValueSql("datetime()");
+
             builder
                 .Property(m => m.Title)
                 .IsRequired()

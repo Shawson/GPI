@@ -5,8 +5,10 @@ using GPI.Api.SwaggerConfig;
 using GPI.Data;
 using GPI.Data.Repositories;
 using GPI.Services.BackgroundTasks;
+using GPI.Services.ContentHosts;
 using GPI.Services.CQRS.Commands;
 using GPI.Services.CQRS.Queries;
+using GPI.Services.FileSystem;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -69,7 +71,7 @@ namespace GPI.Api
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(DbContext), typeof(GPIDbContext));
-
+            services.AddScoped<IDirectoryShim, DirectoryShim>();
             services.AddScoped<IApplicationStartWorker, AppStartWorker>();
 
             services.AddAutoMapper(typeof(Startup));
@@ -79,6 +81,12 @@ namespace GPI.Api
 
         public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider, IWebHostEnvironment env)
         {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<GPIDbContext>();
+                context.Database.Migrate();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

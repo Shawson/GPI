@@ -34,6 +34,7 @@ namespace GPI.Api.AppStart
             {
                 _mediatrTaskQueue.QueueBackgroundWorkItem(new ScanForNewHostsRequest());
                 _mediatrTaskQueue.QueueBackgroundWorkItem(new ScanForContentRequest());
+                _mediatrTaskQueue.QueueBackgroundWorkItem(new FakeLongRunningProcessRequest());
             }
             catch(Exception e)
             {

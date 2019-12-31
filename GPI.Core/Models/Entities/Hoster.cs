@@ -6,5 +6,6 @@ namespace GPI.Core.Models.Entities
     {
         public string Title { get; set; }
         public IEnumerable<Game> Games { get; set; }
+        public string TypeName { get; set; }
     }
 }

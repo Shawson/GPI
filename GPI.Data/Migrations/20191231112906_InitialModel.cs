@@ -12,11 +12,10 @@ namespace GPI.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    DateAdded = table.Column<DateTime>(nullable: false),
+                    DateAdded = table.Column<DateTime>(nullable: false, defaultValueSql: "datetime()"),
                     Deleted = table.Column<DateTime>(nullable: true),
                     Title = table.Column<string>(maxLength: 50, nullable: false),
-                    LauncherExe = table.Column<string>(nullable: true),
-                    LauncherParameters = table.Column<string>(nullable: true)
+                    TypeName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -28,7 +27,7 @@ namespace GPI.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    DateAdded = table.Column<DateTime>(nullable: false),
+                    DateAdded = table.Column<DateTime>(nullable: false, defaultValueSql: "datetime()"),
                     Deleted = table.Column<DateTime>(nullable: true),
                     Title = table.Column<string>(maxLength: 50, nullable: false)
                 },
@@ -52,34 +51,11 @@ namespace GPI.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContentScanners",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    DateAdded = table.Column<DateTime>(nullable: false),
-                    Deleted = table.Column<DateTime>(nullable: true),
-                    HosterId = table.Column<Guid>(nullable: false),
-                    ScannerAssembly = table.Column<string>(nullable: true),
-                    ScanPaths = table.Column<string>(nullable: true),
-                    Extensions = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContentScanners", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ContentScanners_Hoster_HosterId",
-                        column: x => x.HosterId,
-                        principalTable: "Hoster",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Game",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    DateAdded = table.Column<DateTime>(nullable: false),
+                    DateAdded = table.Column<DateTime>(nullable: false, defaultValueSql: "datetime()"),
                     Deleted = table.Column<DateTime>(nullable: true),
                     DisplayName = table.Column<string>(maxLength: 50, nullable: false),
                     FileLocation = table.Column<string>(nullable: true),
@@ -103,12 +79,29 @@ namespace GPI.Data.Migrations
                         principalTable: "Platform",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Launcher",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    DateAdded = table.Column<DateTime>(nullable: false, defaultValueSql: "datetime()"),
+                    Deleted = table.Column<DateTime>(nullable: true),
+                    Title = table.Column<string>(maxLength: 50, nullable: false),
+                    LauncherExe = table.Column<string>(nullable: true),
+                    LauncherParameters = table.Column<string>(nullable: true),
+                    PlatformId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Launcher", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Game_ContentScanners_ScannerId",
-                        column: x => x.ScannerId,
-                        principalTable: "ContentScanners",
+                        name: "FK_Launcher_Platform_PlatformId",
+                        column: x => x.PlatformId,
+                        principalTable: "Platform",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -116,7 +109,7 @@ namespace GPI.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    DateAdded = table.Column<DateTime>(nullable: false),
+                    DateAdded = table.Column<DateTime>(nullable: false, defaultValueSql: "datetime()"),
                     Deleted = table.Column<DateTime>(nullable: true),
                     Title = table.Column<string>(maxLength: 50, nullable: false),
                     Identity = table.Column<string>(nullable: true),
@@ -153,11 +146,6 @@ namespace GPI.Data.Migrations
                 column: "PlatformId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContentScanners_HosterId",
-                table: "ContentScanners",
-                column: "HosterId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Game_HosterId",
                 table: "Game",
                 column: "HosterId");
@@ -168,9 +156,9 @@ namespace GPI.Data.Migrations
                 column: "PlatformId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Game_ScannerId",
-                table: "Game",
-                column: "ScannerId");
+                name: "IX_Launcher_PlatformId",
+                table: "Launcher",
+                column: "PlatformId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -179,19 +167,19 @@ namespace GPI.Data.Migrations
                 name: "Alias");
 
             migrationBuilder.DropTable(
+                name: "Launcher");
+
+            migrationBuilder.DropTable(
                 name: "ThirdParties");
 
             migrationBuilder.DropTable(
                 name: "Game");
 
             migrationBuilder.DropTable(
-                name: "Platform");
-
-            migrationBuilder.DropTable(
-                name: "ContentScanners");
-
-            migrationBuilder.DropTable(
                 name: "Hoster");
+
+            migrationBuilder.DropTable(
+                name: "Platform");
         }
     }
 }

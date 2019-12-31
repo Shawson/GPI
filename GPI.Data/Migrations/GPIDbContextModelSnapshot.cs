@@ -26,7 +26,9 @@ namespace GPI.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DateAdded")
-                        .HasColumnType("TEXT");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("datetime()");
 
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("TEXT");
@@ -49,37 +51,6 @@ namespace GPI.Data.Migrations
                     b.HasDiscriminator<int>("AliasType");
                 });
 
-            modelBuilder.Entity("GPI.Core.Models.Entities.ContentScanner", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("Deleted")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Extensions")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("HosterId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ScanPaths")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ScannerAssembly")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HosterId");
-
-                    b.ToTable("ContentScanners");
-                });
-
             modelBuilder.Entity("GPI.Core.Models.Entities.Game", b =>
                 {
                     b.Property<Guid>("Id")
@@ -87,7 +58,9 @@ namespace GPI.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateAdded")
-                        .HasColumnType("TEXT");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("datetime()");
 
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("TEXT");
@@ -119,8 +92,6 @@ namespace GPI.Data.Migrations
 
                     b.HasIndex("PlatformId");
 
-                    b.HasIndex("ScannerId");
-
                     b.ToTable("Game");
                 });
 
@@ -131,7 +102,36 @@ namespace GPI.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateAdded")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("datetime()");
+
+                    b.Property<DateTime?>("Deleted")
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("TypeName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Hoster");
+                });
+
+            modelBuilder.Entity("GPI.Core.Models.Entities.Launcher", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateAdded")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("datetime()");
 
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("TEXT");
@@ -142,6 +142,9 @@ namespace GPI.Data.Migrations
                     b.Property<string>("LauncherParameters")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("PlatformId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -149,7 +152,9 @@ namespace GPI.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Hoster");
+                    b.HasIndex("PlatformId");
+
+                    b.ToTable("Launcher");
                 });
 
             modelBuilder.Entity("GPI.Core.Models.Entities.Platform", b =>
@@ -159,7 +164,9 @@ namespace GPI.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateAdded")
-                        .HasColumnType("TEXT");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("datetime()");
 
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("TEXT");
@@ -218,15 +225,6 @@ namespace GPI.Data.Migrations
                     b.HasDiscriminator().HasValue(2);
                 });
 
-            modelBuilder.Entity("GPI.Core.Models.Entities.ContentScanner", b =>
-                {
-                    b.HasOne("GPI.Core.Models.Entities.Hoster", "Hoster")
-                        .WithMany()
-                        .HasForeignKey("HosterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("GPI.Core.Models.Entities.Game", b =>
                 {
                     b.HasOne("GPI.Core.Models.Entities.Hoster", "Hoster")
@@ -240,10 +238,15 @@ namespace GPI.Data.Migrations
                         .HasForeignKey("PlatformId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.HasOne("GPI.Core.Models.Entities.ContentScanner", "ContentScanner")
-                        .WithMany("Games")
-                        .HasForeignKey("ScannerId");
+            modelBuilder.Entity("GPI.Core.Models.Entities.Launcher", b =>
+                {
+                    b.HasOne("GPI.Core.Models.Entities.Platform", "Platform")
+                        .WithMany("Launchers")
+                        .HasForeignKey("PlatformId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GPI.Core.Models.Entities.GameAlias", b =>

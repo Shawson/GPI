@@ -11,7 +11,7 @@ namespace GPI.Services.ContentHosts
         Guid HosterIdentifier { get; }
         Guid DefaultPlatformIdentifier { get; }
         string Title { get; }
-        Task<List<GameInfo>> ScanForGames(Dictionary<string, string> config, CancellationToken token);
+        Task<List<GameInfo>> ScanForGames(CancellationToken token);
         Task LaunchGame(Guid gameId);
     }
 }

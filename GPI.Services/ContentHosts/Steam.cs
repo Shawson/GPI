@@ -21,7 +21,7 @@ namespace GPI.Services.ContentHosts
 
         }
 
-        public Task<List<GameInfo>> ScanForGames(Dictionary<string, string> config, CancellationToken token)
+        public Task<List<GameInfo>> ScanForGames(CancellationToken token)
         {
             throw new NotImplementedException();
         }

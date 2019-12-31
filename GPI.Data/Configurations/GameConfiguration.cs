@@ -1,6 +1,7 @@
 ﻿using GPI.Core.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,6 +13,10 @@ namespace GPI.Data.Configurations
         {
             builder
                 .HasKey(m => m.Id);
+
+            builder
+                .Property(m => m.DateAdded)
+                .HasDefaultValueSql("datetime()");
 
             builder
                 .Property(m => m.DisplayName)

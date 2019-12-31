@@ -18,4 +18,8 @@
     <ProjectReference Include="..\GPI.Core\GPI.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

@@ -52,7 +52,8 @@ namespace GPI.Services.CQRS.Commands
                     await _hosterRepository.AddAsync(new Hoster
                     {
                         Id = instance.HosterIdentifier,
-                        Title = instance.Title
+                        Title = instance.Title,
+                        TypeName = hosterType.ToString()
                     });
                 }
             }

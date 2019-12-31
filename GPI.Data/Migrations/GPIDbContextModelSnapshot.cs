@@ -73,17 +73,14 @@ namespace GPI.Data.Migrations
                     b.Property<string>("FileLocation")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("HosterId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("HosterIdentifier")
+                    b.Property<string>("HosterContentIdentifier")
                         .HasColumnType("TEXT")
                         .HasMaxLength(512);
 
-                    b.Property<Guid>("PlatformId")
+                    b.Property<Guid>("HosterId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ScannerId")
+                    b.Property<Guid>("PlatformId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

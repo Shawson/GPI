@@ -17,12 +17,7 @@ namespace GPI.Core.Models.Entities
         /// <summary>
         /// The identifier used by the platform to identify the game.  Eg; SteamId
         /// </summary>
-        public string HosterIdentifier { get; set; }
-
-        /// <summary>
-        /// Used to identify scanner used to import this content.  Null if no scanner was used
-        /// </summary>
-        public Guid? ScannerId { get; set; }
+        public string HosterContentIdentifier { get; set; }
 
         /// <summary>
         /// Used to identify the platform for this game Eg; PC/ SNES/ OCULUS

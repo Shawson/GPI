@@ -10,6 +10,7 @@ namespace GPI.Core
             public static Guid PC = Guid.Parse("E90C3B68-73A4-44B8-9DB2-78045F63E32B");
             public static Guid NES = Guid.Parse("FAE38978-6C54-499D-B1AE-DA5FCD86AC73");
             public static Guid SNES = Guid.Parse("ECA5E331-CE7E-42F7-AA58-0FC676D05C6A");
+            public static Guid N64 = Guid.Parse("FEE90143-5AFC-4CDD-93E8-E93795B679E7");
             public static Guid SegaGenesis = Guid.Parse("14DA5DC8-E1C5-440A-8694-5DA21EAA8C32");
             public static Guid PSX = Guid.Parse("EA012B25-2895-42ED-9B80-369A83FE387C");
         }

@@ -1,6 +1,8 @@
 ﻿using GPI.Core;
 using GPI.Core.Models.DTOs;
 using GPI.Services.FileSystem;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +15,7 @@ namespace GPI.Services.ContentHosts
     public class NoHost : IBasicContentHost
     {
         private readonly IDirectoryShim _directory;
+        private readonly ILogger<NoHost> _logger;
 
         public Guid HosterIdentifier { get; } = GuidHelper.Hosters.None;
         public Guid DefaultPlatformIdentifier { get; } = GuidHelper.Platforms.None;
@@ -25,28 +28,41 @@ namespace GPI.Services.ContentHosts
 
         }
 
-        public NoHost(IDirectoryShim directory)
+        public NoHost(IDirectoryShim directory, ILogger<NoHost> logger)
         {
             _directory = directory;
+            this._logger = logger;
         }
 
         public Task<List<GameInfo>> ScanForGames(CancellationToken token)
         {
             List<GameInfo> results = new List<GameInfo>();
 
+
             foreach (var defintion in Settings.Definitions)
             {
-                var files = _directory.GetFiles(defintion.Path, defintion.Recursive);
+                try
+                {
+                    _logger.LogInformation($"Scanning {defintion.Path}");
 
-                results.AddRange(files
-                    .Select(x => new GameInfo
-                    {
-                        FileLocation = x,
-                        PlatformId = defintion.PlatformId
-                    })
-                    .Where(x => defintion.Extensions.Contains(x.FileExtension))
-                    .ToList());
+                    var files = _directory.GetFiles(defintion.Path, defintion.Recursive);
+
+                    results.AddRange(files
+                        .Select(x => new GameInfo
+                        {
+                            FileLocation = x,
+                            PlatformId = defintion.PlatformId,
+                            DisplayTitle = Path.GetFileName(x)
+                        })
+                        .Where(x => defintion.Extensions.Contains(x.FileExtension))
+                        .ToList());
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Problem scanning directory {ex}");
+                }
             }
+
 
             return Task.FromResult(results);
         }
@@ -54,6 +70,11 @@ namespace GPI.Services.ContentHosts
         public Task LaunchGame(Guid gameId)
         {
             throw new NotImplementedException();
+        }
+
+        public void LoadSettingsFromJson(string jsonSettings)
+        {
+            Settings = JsonConvert.DeserializeObject<FileSystemConfig>(jsonSettings);
         }
     }
 

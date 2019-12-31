@@ -13,5 +13,7 @@ namespace GPI.Services.ContentHosts
         string Title { get; }
         Task<List<GameInfo>> ScanForGames(CancellationToken token);
         Task LaunchGame(Guid gameId);
+
+        void LoadSettingsFromJson(string jsonSettings);
     }
 }

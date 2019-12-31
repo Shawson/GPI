@@ -59,8 +59,7 @@ namespace GPI.Data.Migrations
                     Deleted = table.Column<DateTime>(nullable: true),
                     DisplayName = table.Column<string>(maxLength: 50, nullable: false),
                     FileLocation = table.Column<string>(nullable: true),
-                    HosterIdentifier = table.Column<string>(maxLength: 512, nullable: true),
-                    ScannerId = table.Column<Guid>(nullable: true),
+                    HosterContentIdentifier = table.Column<string>(maxLength: 512, nullable: true),
                     PlatformId = table.Column<Guid>(nullable: false),
                     HosterId = table.Column<Guid>(nullable: false)
                 },

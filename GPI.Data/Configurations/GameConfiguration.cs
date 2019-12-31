@@ -24,7 +24,7 @@ namespace GPI.Data.Configurations
                 .HasMaxLength(50);
 
             builder
-                .Property(m => m.HosterIdentifier)
+                .Property(m => m.HosterContentIdentifier)
                 .HasMaxLength(512);
 
             builder

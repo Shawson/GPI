@@ -1,5 +1,6 @@
 ﻿using GPI.Core;
 using GPI.Core.Models.DTOs;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,6 +30,11 @@ namespace GPI.Services.ContentHosts
         public Task LaunchGame(Guid gameId)
         {
             throw new NotImplementedException();
+        }
+
+        public void LoadSettingsFromJson(string jsonSettings)
+        {
+            Settings = JsonConvert.DeserializeObject<SteamConfig>(jsonSettings);
         }
     }
 

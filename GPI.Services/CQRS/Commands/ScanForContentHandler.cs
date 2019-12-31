@@ -7,27 +7,24 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.CQRS.Commands
 {
-    public class ScanForContentRequest : IRequest<Unit>
+    public class ScanForContentRequest : IRequest
     {
     }
 
     public class ScanForContentHandler : IRequestHandler<ScanForContentRequest, Unit>
     {
         private readonly ILogger<ScanForContentHandler> _logger;
-        private readonly IBackgroundTaskQueue _backgroundTaskQueue;
         private readonly IBackgroundTaskProgressTracker _backgroundTaskProgressTracker;
 
         public ScanForContentHandler(
             ILogger<ScanForContentHandler> logger,
-            IBackgroundTaskQueue backgroundTaskQueue,
             IBackgroundTaskProgressTracker backgroundTaskProgressTracker)
         {
             _logger = logger;
-            _backgroundTaskQueue = backgroundTaskQueue;
            _backgroundTaskProgressTracker = backgroundTaskProgressTracker;
         }
 
-        public Task<Unit> Handle(ScanForContentRequest request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(ScanForContentRequest request, CancellationToken cancellationToken)
         {
             // get all scanners
 
@@ -37,8 +34,7 @@ namespace GPI.Services.CQRS.Commands
 
             // maybe add a fake task to the queue which encompasses all the scanners we need to run?
 
-            _backgroundTaskQueue.QueueBackgroundWorkItem(async token =>
-            {
+
 
                 
                 // Simulate three 5-second tasks to complete
@@ -47,16 +43,16 @@ namespace GPI.Services.CQRS.Commands
                 int delayLoop = 0;
                 var guid = Guid.NewGuid().ToString();
 
-                _backgroundTaskProgressTracker.AddTaskToTrack("Content Scanning", token);
+                _backgroundTaskProgressTracker.AddTaskToTrack("Content Scanning", cancellationToken);
 
                 _logger.LogInformation(
                     "Queued Background Task {Guid} is starting.", guid);
 
-                while (!token.IsCancellationRequested && delayLoop < 3)
+                while (!cancellationToken.IsCancellationRequested && delayLoop < 3)
                 {
                     try
                     {
-                        await Task.Delay(TimeSpan.FromSeconds(5), token);
+                        await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
                     }
                     catch (OperationCanceledException)
                     {
@@ -82,9 +78,9 @@ namespace GPI.Services.CQRS.Commands
                     _logger.LogInformation(
                         "Fake Content Scanner {Guid} was cancelled.", guid);
                 }
-            });
 
-            return Task.FromResult(Unit.Value);
+
+            return await Task.FromResult(Unit.Value);
         }
     }
 }

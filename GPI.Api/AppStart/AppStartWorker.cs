@@ -11,35 +11,34 @@ namespace GPI.Api.AppStart
 {
     internal class AppStartWorker : IApplicationStartWorker
     {
-        private readonly IMediator _mediatr;
         private readonly ILogger<AppStartWorker> _logger;
-        private readonly IRepository<Game> _gameRepository;
-        private readonly IBackgroundTaskQueue _taskQueue;
+        private readonly IBackgroundMediatrTaskQueue _mediatrTaskQueue;
         private readonly IBackgroundTaskProgressTracker _progressTracker;
 
 
         public AppStartWorker(
-            IMediator mediatr,
             ILogger<AppStartWorker> logger, 
-            IRepository<Game> gameRepository,
-            IBackgroundTaskQueue taskQueue,
-            IBackgroundTaskProgressTracker progressTracker)
+            IBackgroundTaskProgressTracker progressTracker,
+            IBackgroundMediatrTaskQueue mediatrTaskQueue)
         {
-            _mediatr = mediatr;
             _logger = logger;
-            _gameRepository = gameRepository;
-            _taskQueue = taskQueue;
             _progressTracker = progressTracker;
+            _mediatrTaskQueue = mediatrTaskQueue;
         }
 
         public async Task DoWork()
         {
             _logger.LogInformation("AppStartWorker Running");
 
-            await _mediatr.Send(new ScanForContentRequest());
-
-            /*
-            */
+            try
+            {
+                //_mediatrTaskQueue.QueueBackgroundWorkItem(new ScanForNewHostsRequest());
+                _mediatrTaskQueue.QueueBackgroundWorkItem(new ScanForContentRequest());
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Problem queueing startup jobs in AppStart");
+            }
         }
     }
 }

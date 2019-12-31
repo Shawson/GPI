@@ -25,9 +25,11 @@ namespace GPI.Api
                     services.AddHostedService<LifetimeEventsHostedService>();
 
                     // setup background task runner
-                    services.AddHostedService<QueuedHostedService>();
-                    services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
                     services.AddSingleton<IBackgroundTaskProgressTracker, BackgroundTaskProgressTracker>();
+
+                    services.AddHostedService<QueuedHostedMediatrTaskService>();
+                    services.AddSingleton<IBackgroundMediatrTaskQueue, BackgroundMediatrTaskQueue>();
+                    
                 });
     }
 }

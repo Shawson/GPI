@@ -20,18 +20,15 @@ namespace GPI.Services.CQRS.Commands
     {
         private readonly ILogger<ScanForNewHostsHandler> _logger;
         private readonly IRepository<Hoster> _hosterRepository;
-        private readonly IBackgroundTaskQueue _backgroundTaskQueue;
         private readonly IBackgroundTaskProgressTracker _backgroundTaskProgressTracker;
 
         public ScanForNewHostsHandler(
             ILogger<ScanForNewHostsHandler> logger,
             IRepository<Hoster> hosterRepository,
-            IBackgroundTaskQueue backgroundTaskQueue,
             IBackgroundTaskProgressTracker backgroundTaskProgressTracker)
         {
             _logger = logger;
             _hosterRepository = hosterRepository;
-            _backgroundTaskQueue = backgroundTaskQueue;
             _backgroundTaskProgressTracker = backgroundTaskProgressTracker;
         }
 

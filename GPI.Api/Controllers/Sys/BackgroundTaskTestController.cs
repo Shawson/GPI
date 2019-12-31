@@ -13,18 +13,15 @@ namespace GPI.Api.Controllers.Sys
     [Route("api/v{v:apiVersion}/[controller]")]
     public class BackgroundTaskTestController : ControllerBase
     {
-        private readonly IBackgroundTaskQueue _taskQueue;
         private readonly IBackgroundTaskProgressTracker _taskTracker;
         private readonly ILogger<BackgroundTaskTestController> _logger;
 
         public BackgroundTaskTestController(
-            IBackgroundTaskQueue taskQueue,
             IBackgroundTaskProgressTracker taskTracker,
             ILogger<BackgroundTaskTestController> logger)
         {
-            this._taskQueue = taskQueue;
-            this._taskTracker = taskTracker;
-            this._logger = logger;
+            _taskTracker = taskTracker;
+            _logger = logger;
         }
 
         [HttpGet]

@@ -1,8 +1,11 @@
 using AutoMapper;
 using GPI.Api.AppStart;
+using GPI.Api.BackgroundServices;
 using GPI.Api.SwaggerConfig;
 using GPI.Data;
 using GPI.Data.Repositories;
+using GPI.Services.BackgroundTasks;
+using GPI.Services.CQRS.Commands;
 using GPI.Services.CQRS.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Builder;

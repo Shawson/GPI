@@ -34,6 +34,8 @@ namespace GPI.Services.CQRS.Commands
 
         public async Task<Unit> Handle(ScanForNewHostsRequest request, CancellationToken cancellationToken)
         {
+            _backgroundTaskProgressTracker.AddTaskToTrack("Scanning for new Hosters", cancellationToken);
+
             var type = typeof(IBasicContentHost);
             var types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
@@ -56,6 +58,8 @@ namespace GPI.Services.CQRS.Commands
             }
 
             await _hosterRepository.SaveChanges();
+
+            _backgroundTaskProgressTracker.MarkTaskFinished("Scanning for new Hosters");
 
             return await Task.FromResult(Unit.Value);
         }

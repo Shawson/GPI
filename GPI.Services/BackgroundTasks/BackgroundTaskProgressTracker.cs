@@ -30,6 +30,11 @@ namespace GPI.Services.BackgroundTasks
             }
         }
 
+        public void MarkTaskFinished(string jobName)
+        {
+            UpdateTask(jobName, 1);
+        }
+
         public List<BackgroundTaskStatus> GetActiveBackgroundTasks()
         {
             return _workUnderway

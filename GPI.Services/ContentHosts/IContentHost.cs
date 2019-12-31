@@ -14,9 +14,4 @@ namespace GPI.Services.ContentHosts
         Task<List<GameInfo>> ScanForGames(Dictionary<string, string> config, CancellationToken token);
         Task LaunchGame(Guid gameId);
     }
-
-    public interface IContentHost<TConfigType> : IBasicContentHost where TConfigType : class
-    {
-        TConfigType Settings { get; set; }
-    }
 }

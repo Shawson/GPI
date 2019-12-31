@@ -8,13 +8,18 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.ContentHosts
 {
-    public class Steam : IContentHost<SteamConfig>
+    public class Steam : IBasicContentHost
     {
         public Guid HosterIdentifier { get; } = GuidHelper.Hosters.Steam;
         public Guid DefaultPlatformIdentifier { get; } = GuidHelper.Platforms.PC;
         public SteamConfig Settings { get; set; } = null;
 
         public string Title => "Steam";
+
+        public Steam()
+        {
+
+        }
 
         public Task<List<GameInfo>> ScanForGames(Dictionary<string, string> config, CancellationToken token)
         {

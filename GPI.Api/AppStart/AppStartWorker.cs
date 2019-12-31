@@ -32,7 +32,7 @@ namespace GPI.Api.AppStart
 
             try
             {
-                //_mediatrTaskQueue.QueueBackgroundWorkItem(new ScanForNewHostsRequest());
+                _mediatrTaskQueue.QueueBackgroundWorkItem(new ScanForNewHostsRequest());
                 _mediatrTaskQueue.QueueBackgroundWorkItem(new ScanForContentRequest());
             }
             catch(Exception e)

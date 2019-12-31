@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.ContentHosts
 {
-    public class NoHost : IContentHost<FileSystemConfig>
+    public class NoHost : IBasicContentHost
     {
         private readonly IDirectoryShim _directory;
 
@@ -19,6 +19,11 @@ namespace GPI.Services.ContentHosts
         public FileSystemConfig Settings { get; set; }
 
         public string Title => "";
+
+        public NoHost()
+        {
+
+        }
 
         public NoHost(IDirectoryShim directory)
         {

@@ -3,14 +3,16 @@ using System;
 using GPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GPI.Data.Migrations
 {
     [DbContext(typeof(GPIDbContext))]
-    partial class GPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191231155246_AddGameHash")]
+    partial class AddGameHash
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,4 +1,5 @@
-﻿using GPI.Core.Models.Entities;
+﻿using GPI.Core.Models.DTOs;
+using GPI.Core.Models.Entities;
 using GPI.Data.Repositories;
 using GPI.Services.BackgroundTasks;
 using GPI.Services.ContentHosts;
@@ -7,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,6 +27,7 @@ namespace GPI.Services.CQRS.Commands
         private readonly IBackgroundTaskProgressTracker _backgroundTaskProgressTracker;
         private readonly IServiceProvider _serviceProvider;
         private readonly IMediator _mediator;
+        private readonly MD5 _md5Hash;
 
         public ScanForContentHandler(
             ILogger<ScanForContentHandler> logger,
@@ -39,6 +43,8 @@ namespace GPI.Services.CQRS.Commands
             _backgroundTaskProgressTracker = backgroundTaskProgressTracker;
             _serviceProvider = serviceProvider;
             _mediator = mediator;
+
+            _md5Hash = MD5.Create();
         }
 
         public async Task<Unit> Handle(ScanForContentRequest request, CancellationToken cancellationToken)
@@ -49,7 +55,7 @@ namespace GPI.Services.CQRS.Commands
             var hosters = await _hosterRepository.GetAllAsync().ToListAsync();
             var completedHosters = 0;
 
-            foreach(var hosterDefintion in hosters)
+            foreach (var hosterDefintion in hosters)
             {
                 _logger.LogInformation($"Started hoster scan {hosterDefintion.TypeName}");
                 try
@@ -74,11 +80,12 @@ namespace GPI.Services.CQRS.Commands
                         HosterContentIdentifier = x.HosterContentIdentifier,
                         HosterId = hoster.HosterIdentifier,
                         PlatformId = x.PlatformId,
+                        Hash = GetMd5Hash($"{x.FileLocation}{x.DisplayTitle}{x.PlatformId}")
                     }).ToList());
 
                     await _gameRepository.SaveChanges();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError($"Problem with hoster {hosterDefintion.TypeName} : {ex}");
                 }
@@ -87,8 +94,30 @@ namespace GPI.Services.CQRS.Commands
 
                 _backgroundTaskProgressTracker.UpdateTask("Content Scanning", completedHosters / hosters.Count);
             }
+            
 
             return await Task.FromResult(Unit.Value);
+        }
+
+        private string GetMd5Hash(string input)
+        {
+
+            // Convert the input string to a byte array and compute the hash.
+            byte[] data = _md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            // Return the hexadecimal string.
+            return sBuilder.ToString();
         }
     }
 }

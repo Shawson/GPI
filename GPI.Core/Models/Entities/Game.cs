@@ -32,6 +32,6 @@ namespace GPI.Core.Models.Entities
         public Hoster Hoster { get; set; }
         public Platform Platform { get; set; }
         public IEnumerable<GameAlias> GameAliases { get; set; }
-        
+        public string Hash { get; set; }
     }
 }

@@ -6,7 +6,7 @@ namespace GPI.Core
     {
         public static class Platforms
         {
-            public static Guid None = Guid.Empty;
+            public static Guid None = Guid.Parse("1B2F8054-B013-40B0-9C9E-E226345BCA30");
             public static Guid PC = Guid.Parse("E90C3B68-73A4-44B8-9DB2-78045F63E32B");
             public static Guid NES = Guid.Parse("FAE38978-6C54-499D-B1AE-DA5FCD86AC73");
             public static Guid SNES = Guid.Parse("ECA5E331-CE7E-42F7-AA58-0FC676D05C6A");
@@ -16,7 +16,7 @@ namespace GPI.Core
         }
         public static class Hosters
         {
-            public static Guid None = Guid.Empty;
+            public static Guid None = Guid.Parse("80D5705E-C57B-40BE-890C-98CC81C5C871");
             public static Guid Steam = Guid.Parse("E6836EFD-3A8A-4F1E-8D9A-EF0B582268B3");
             public static Guid Uplay = Guid.Parse("CBBB5D72-646E-4968-8504-055CF2257E82");
             public static Guid Origin = Guid.Parse("7D523BBB-00F0-4FFA-859B-A865A4CBB315");

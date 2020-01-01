@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.CQRS.Commands
 {
-    public class FetchConfigForHosterRequest : IRequest<string>
+    public class HosterFetchConfigRequest : IRequest<string>
     {
         public string TypeName { get; set; }
 
-        public FetchConfigForHosterRequest(string typeName)
+        public HosterFetchConfigRequest(string typeName)
         {
             TypeName = typeName;
         }
     }
 
-    public class FetchConfigForHosterHandler : IRequestHandler<FetchConfigForHosterRequest, string>
+    public class HosterFetchConfigHandler : IRequestHandler<HosterFetchConfigRequest, string>
     {
-        public async Task<string> Handle(FetchConfigForHosterRequest request, CancellationToken cancellationToken)
+        public async Task<string> Handle(HosterFetchConfigRequest request, CancellationToken cancellationToken)
         {
             var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 

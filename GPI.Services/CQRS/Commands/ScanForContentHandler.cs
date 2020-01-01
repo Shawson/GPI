@@ -47,8 +47,8 @@ namespace GPI.Services.CQRS.Commands
             _backgroundTaskProgressTracker.AddTaskToTrack("Content Scanning", cancellationToken);
 
             // get all scanners
-            var hosters = await _mediator.Send(new RetrieveAllHostersRequest());
-            var getCurrentHashes = await _mediator.Send(new RetrieveAllGameHashesRequest());
+            var hosters = await _mediator.Send(new HosterGetAllRequest());
+            var getCurrentHashes = await _mediator.Send(new GameGetAllHashesRequest());
 
             var completedHosters = 0;
 
@@ -83,7 +83,7 @@ namespace GPI.Services.CQRS.Commands
 
                         if (gamesToAdd.Any())
                         {
-                            await _mediator.Send(new InsertBulkGamesRequest(gamesToAdd));
+                            await _mediator.Send(new GameBulkInsertRequest(gamesToAdd));
                         }
                     }
 
@@ -107,7 +107,7 @@ namespace GPI.Services.CQRS.Commands
             var hosterType = Type.GetType(hosterDefintion.TypeName, true);
             var hoster = (IBasicContentHost)_serviceProvider.AsSelf(hosterType);
 
-            var settingsJson = await _mediator.Send(new FetchConfigForHosterRequest(hosterDefintion.TypeName));
+            var settingsJson = await _mediator.Send(new HosterFetchConfigRequest(hosterDefintion.TypeName));
             hoster.LoadSettingsFromJson(settingsJson);
             return hoster;
         }

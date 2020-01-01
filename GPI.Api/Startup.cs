@@ -76,7 +76,7 @@ namespace GPI.Api
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddMediatR(typeof(RetrieveGameHandler).GetTypeInfo().Assembly);
+            services.AddMediatR(typeof(GameGetByIdHandler).GetTypeInfo().Assembly);
         }
 
         public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider, IWebHostEnvironment env)

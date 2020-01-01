@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.CQRS.Commands
 {
-    public class DeleteGameRequest : IRequest<Unit>
+    public class GameDeleteRequest : IRequest<Unit>
     {
-        public DeleteGameRequest(Guid gameId)
+        public GameDeleteRequest(Guid gameId)
         {
             GameId = gameId;
         }
@@ -17,13 +17,13 @@ namespace GPI.Services.CQRS.Commands
         public Guid GameId { get; }
     }
 
-    public class DeleteGameHandler : IRequestHandler<DeleteGameRequest, Unit>
+    public class GameDeleteHandler : IRequestHandler<GameDeleteRequest, Unit>
     {
-        public DeleteGameHandler()
+        public GameDeleteHandler()
         {
 
         }
-        public Task<Unit> Handle(DeleteGameRequest request, CancellationToken cancellationToken)
+        public Task<Unit> Handle(GameDeleteRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

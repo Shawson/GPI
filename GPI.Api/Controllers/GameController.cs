@@ -31,7 +31,7 @@ namespace GPI.Api.Controllers
                 return NotFound();
             }
 
-            var game = await _mediatr.Send(new RetrieveGameRequest(gameId));
+            var game = await _mediatr.Send(new GameGetByIdRequest(gameId));
             return Ok(game);
         }
 
@@ -40,7 +40,7 @@ namespace GPI.Api.Controllers
         {
             game.Id = Guid.Empty;
 
-            _ = await _mediatr.Send(new UpsertGameRequest(game));
+            _ = await _mediatr.Send(new GameUpsertRequest(game));
 
             return Created($"Get/{game.Id}", game);
         }
@@ -53,7 +53,7 @@ namespace GPI.Api.Controllers
                 return NotFound();
             }
 
-            _ = await _mediatr.Send(new UpsertGameRequest(game));
+            _ = await _mediatr.Send(new GameUpsertRequest(game));
             return Ok();
         }
 
@@ -65,7 +65,7 @@ namespace GPI.Api.Controllers
                 return NotFound();
             }
 
-            _ = await _mediatr.Send(new DeleteGameRequest(gameId));
+            _ = await _mediatr.Send(new GameDeleteRequest(gameId));
 
             return Ok();
         }

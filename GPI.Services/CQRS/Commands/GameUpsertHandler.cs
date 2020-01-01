@@ -9,25 +9,25 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.CQRS.Commands
 {
-    public class UpsertGameRequest : IRequest<Game>
+    public class GameUpsertRequest : IRequest<Game>
     {
-        public UpsertGameRequest(Game game)
+        public GameUpsertRequest(Game game)
         {
             Game = game;
         }
 
         public Game Game { get; }
     }
-    public class UpsertGameHandler : IRequestHandler<UpsertGameRequest, Game>
+    public class GameUpsertHandler : IRequestHandler<GameUpsertRequest, Game>
     {
         private readonly IRepository<Game> _gameRepository;
 
-        public UpsertGameHandler(IRepository<Game> gameRepository)
+        public GameUpsertHandler(IRepository<Game> gameRepository)
         {
             this._gameRepository = gameRepository;
         }
 
-        public async Task<Game> Handle(UpsertGameRequest request, CancellationToken cancellationToken)
+        public async Task<Game> Handle(GameUpsertRequest request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
 

@@ -28,7 +28,9 @@ namespace GPI.Services.ContentHosts
 
         }
 
-        public NoHost(IDirectoryShim directory, ILogger<NoHost> logger)
+        public NoHost(
+            IDirectoryShim directory, 
+            ILogger<NoHost> logger)
         {
             _directory = directory;
             this._logger = logger;
@@ -62,7 +64,6 @@ namespace GPI.Services.ContentHosts
                     _logger.LogError($"Problem scanning directory {ex}");
                 }
             }
-
 
             return Task.FromResult(results);
         }

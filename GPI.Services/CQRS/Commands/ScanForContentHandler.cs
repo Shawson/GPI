@@ -55,6 +55,8 @@ namespace GPI.Services.CQRS.Commands
             var hosters = await _hosterRepository.GetAllAsync().ToListAsync();
             var completedHosters = 0;
 
+            var getCurrentHashes = await _gameRepository.GetAllAsync().Select(x => x.Hash).ToListAsync();
+
             foreach (var hosterDefintion in hosters)
             {
                 _logger.LogInformation($"Started hoster scan {hosterDefintion.TypeName}");
@@ -72,18 +74,32 @@ namespace GPI.Services.CQRS.Commands
 
                     _logger.LogInformation($"Found {games.Count}");
 
-                    await _gameRepository.AddRangeAsync(games.Select(x => new Game
+                    if (games.Any())
                     {
-                        Id = Guid.NewGuid(),
-                        DisplayName = x.DisplayTitle,
-                        FileLocation = x.FileLocation,
-                        HosterContentIdentifier = x.HosterContentIdentifier,
-                        HosterId = hoster.HosterIdentifier,
-                        PlatformId = x.PlatformId,
-                        Hash = GetMd5Hash($"{x.FileLocation}{x.DisplayTitle}{x.PlatformId}")
-                    }).ToList());
+                        var gamesToAdd = games
+                            .Select(x => new Game
+                            {
+                                Id = Guid.NewGuid(),
+                                DisplayName = x.DisplayTitle,
+                                FileLocation = x.FileLocation,
+                                HosterContentIdentifier = x.HosterContentIdentifier,
+                                HosterId = hoster.HosterIdentifier,
+                                PlatformId = x.PlatformId,
+                                Hash = GetMd5Hash($"{x.FileLocation}{x.DisplayTitle}{x.PlatformId}")
+                            })
+                            .Where(x => !getCurrentHashes.Contains(x.Hash))
+                            .ToList();
 
-                    await _gameRepository.SaveChanges();
+                        _logger.LogInformation($"{gamesToAdd.Count} of these need adding");
+
+                        if (gamesToAdd.Any())
+                        {
+                            await _gameRepository.AddRangeAsync(gamesToAdd);
+
+                            await _gameRepository.SaveChanges();
+                        }
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -101,7 +117,6 @@ namespace GPI.Services.CQRS.Commands
 
         private string GetMd5Hash(string input)
         {
-
             // Convert the input string to a byte array and compute the hash.
             byte[] data = _md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
 

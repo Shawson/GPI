@@ -3,6 +3,7 @@ using GPI.Core.Models.Entities;
 using GPI.Data.Repositories;
 using GPI.Services.BackgroundTasks;
 using GPI.Services.ContentHosts;
+using GPI.Services.CQRS.Queries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -22,8 +23,6 @@ namespace GPI.Services.CQRS.Commands
     public class ScanForContentHandler : IRequestHandler<ScanForContentRequest, Unit>
     {
         private readonly ILogger<ScanForContentHandler> _logger;
-        private readonly IRepository<Hoster> _hosterRepository;
-        private readonly IRepository<Game> _gameRepository;
         private readonly IBackgroundTaskProgressTracker _backgroundTaskProgressTracker;
         private readonly IServiceProvider _serviceProvider;
         private readonly IMediator _mediator;
@@ -31,15 +30,11 @@ namespace GPI.Services.CQRS.Commands
 
         public ScanForContentHandler(
             ILogger<ScanForContentHandler> logger,
-            IRepository<Hoster> hosterRepository,
-            IRepository<Game> gameRepository,
             IBackgroundTaskProgressTracker backgroundTaskProgressTracker,
             IServiceProvider serviceProvider,
             IMediator mediator)
         {
             _logger = logger;
-            _hosterRepository = hosterRepository;
-            _gameRepository = gameRepository;
             _backgroundTaskProgressTracker = backgroundTaskProgressTracker;
             _serviceProvider = serviceProvider;
             _mediator = mediator;
@@ -52,23 +47,17 @@ namespace GPI.Services.CQRS.Commands
             _backgroundTaskProgressTracker.AddTaskToTrack("Content Scanning", cancellationToken);
 
             // get all scanners
-            var hosters = await _hosterRepository.GetAllAsync().ToListAsync();
-            var completedHosters = 0;
+            var hosters = await _mediator.Send(new RetrieveAllHostersRequest());
+            var getCurrentHashes = await _mediator.Send(new RetrieveAllGameHashesRequest());
 
-            var getCurrentHashes = await _gameRepository.GetAllAsync().Select(x => x.Hash).ToListAsync();
+            var completedHosters = 0;
 
             foreach (var hosterDefintion in hosters)
             {
                 _logger.LogInformation($"Started hoster scan {hosterDefintion.TypeName}");
                 try
                 {
-                    _logger.LogInformation($"Launching hoster {hosterDefintion.Title} {hosterDefintion.TypeName}");
-
-                    var hosterType = Type.GetType(hosterDefintion.TypeName, true);
-                    var hoster = (IBasicContentHost)_serviceProvider.AsSelf(hosterType);
-
-                    var settingsJson = await _mediator.Send(new FetchConfigForHosterRequest(hosterDefintion.TypeName));
-                    hoster.LoadSettingsFromJson(settingsJson);
+                    var hoster = await GetHosterFromType(hosterDefintion);
 
                     var games = await hoster.ScanForGames(cancellationToken);
 
@@ -94,9 +83,7 @@ namespace GPI.Services.CQRS.Commands
 
                         if (gamesToAdd.Any())
                         {
-                            await _gameRepository.AddRangeAsync(gamesToAdd);
-
-                            await _gameRepository.SaveChanges();
+                            await _mediator.Send(new InsertBulkGamesRequest(gamesToAdd));
                         }
                     }
 
@@ -113,6 +100,16 @@ namespace GPI.Services.CQRS.Commands
             
 
             return await Task.FromResult(Unit.Value);
+        }
+
+        private async Task<IBasicContentHost> GetHosterFromType(Hoster hosterDefintion)
+        {
+            var hosterType = Type.GetType(hosterDefintion.TypeName, true);
+            var hoster = (IBasicContentHost)_serviceProvider.AsSelf(hosterType);
+
+            var settingsJson = await _mediator.Send(new FetchConfigForHosterRequest(hosterDefintion.TypeName));
+            hoster.LoadSettingsFromJson(settingsJson);
+            return hoster;
         }
 
         private string GetMd5Hash(string input)

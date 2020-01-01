@@ -11,7 +11,6 @@ namespace GPI.Services.CQRS.Commands
 {
     public class UpsertGameRequest : IRequest<Game>
     {
-
         public UpsertGameRequest(Game game)
         {
             Game = game;

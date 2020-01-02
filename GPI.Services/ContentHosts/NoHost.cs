@@ -54,7 +54,8 @@ namespace GPI.Services.ContentHosts
                         {
                             FileLocation = x,
                             PlatformId = defintion.PlatformId,
-                            DisplayTitle = Path.GetFileNameWithoutExtension(x)
+                            DisplayTitle = Path.GetFileNameWithoutExtension(x),
+                            HosterContentIdentifier = x
                         })
                         .Where(x => defintion.Extensions.Contains(x.FileExtension))
                         .ToList());

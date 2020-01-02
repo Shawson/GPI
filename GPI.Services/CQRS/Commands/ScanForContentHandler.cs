@@ -74,7 +74,7 @@ namespace GPI.Services.CQRS.Commands
                                 HosterContentIdentifier = x.HosterContentIdentifier,
                                 HosterId = hoster.HosterIdentifier,
                                 PlatformId = x.PlatformId,
-                                Hash = GetMd5Hash($"{x.FileLocation}{x.DisplayTitle}{x.PlatformId}")
+                                Hash = GetMd5Hash($"{x.HosterContentIdentifier}{x.PlatformId}")
                             })
                             .Where(x => !getCurrentHashes.Contains(x.Hash))
                             .ToList();

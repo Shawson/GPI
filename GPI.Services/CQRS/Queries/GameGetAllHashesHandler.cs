@@ -10,9 +10,7 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.CQRS.Queries
 {
-    public class GameGetAllHashesRequest : IRequest<List<string>>
-    {
-    }
+    public class GameGetAllHashesRequest : IRequest<List<string>> { }
 
     public class GameGetAllHashesHandler : IRequestHandler<GameGetAllHashesRequest, List<string>>
     {

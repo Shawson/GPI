@@ -10,9 +10,7 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.CQRS.Queries
 {
-    public class HosterGetAllRequest : IRequest<List<Hoster>>
-    {
-    }
+    public class HosterGetAllRequest : IRequest<List<Hoster>> { }
 
     public class HosterGetAllHandler : IRequestHandler<HosterGetAllRequest, List<Hoster>>
     {

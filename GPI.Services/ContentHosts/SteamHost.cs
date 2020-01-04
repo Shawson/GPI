@@ -1,5 +1,7 @@
 ﻿using GPI.Core;
 using GPI.Core.Models.DTOs;
+using GPI.Services.FileSystem;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.ContentHosts
 {
-    public class Steam : IBasicContentHost
+    public class SteamHost : IBasicContentHost
     {
         public Guid HosterIdentifier { get; } = GuidHelper.Hosters.Steam;
         public Guid DefaultPlatformIdentifier { get; } = GuidHelper.Platforms.PC;
@@ -17,7 +19,10 @@ namespace GPI.Services.ContentHosts
 
         public string Title => "Steam";
 
-        public Steam()
+        public SteamHost() { }
+
+        public SteamHost(IDirectoryShim directory,
+            ILogger<SteamHost> logger)
         {
 
         }

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,13 +22,27 @@ namespace GPI.Services.CQRS.Commands
 
     public class HosterFetchConfigHandler : IRequestHandler<HosterFetchConfigRequest, string>
     {
+        private readonly ILogger<HosterFetchConfigHandler> logger;
+
+        public HosterFetchConfigHandler(ILogger<HosterFetchConfigHandler> logger)
+        {
+            this.logger = logger;
+        }
         public async Task<string> Handle(HosterFetchConfigRequest request, CancellationToken cancellationToken)
         {
             var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
             var finalPath = Path.Combine(path, $"Config/ContentScanners/{request.TypeName}.json");
 
-            return File.ReadAllText(finalPath);
+            try
+            {
+                return File.ReadAllText(finalPath);
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                logger.LogDebug($"Unable to load config file {request.TypeName}");
+                return string.Empty;
+            }
         }
     }
 }

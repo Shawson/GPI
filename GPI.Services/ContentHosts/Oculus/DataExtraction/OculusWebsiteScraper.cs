@@ -12,14 +12,14 @@ namespace GPI.Services.ContentHosts.Oculus.DataExtraction
 {
     public class OculusWebsiteScraper : IOculusWebsiteScraper
     {
-        private readonly ILogger<OculusWebsiteScraper> logger;
+        private readonly ILogger logger;
 
-        public OculusWebsiteScraper(ILogger<OculusWebsiteScraper> logger)
+        public OculusWebsiteScraper(ILogger logger)
         {
 
             this.logger = logger;
         }
-
+        /*
         public OculusWebsiteJson ScrapeDataForApplicationId(IWebView view, string appId)
         {
             logger.Debug($"Trying to scrape {appId}");
@@ -55,6 +55,6 @@ namespace GPI.Services.ContentHosts.Oculus.DataExtraction
                 logger.Error($"Exception trying to scrape {appId} : {ex}");
                 return null;
             }
-        }
+        }*/
     }
 }

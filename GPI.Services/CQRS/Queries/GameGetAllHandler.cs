@@ -9,15 +9,7 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.CQRS.Queries
 {
-    public class GameGetAllRequest : IRequest<List<Game>>
-    {
-        public GameGetAllRequest(Guid gameId)
-        {
-            GameId = gameId;
-        }
-
-        public Guid GameId { get; }
-    }
+    public class GameGetAllRequest : IRequest<List<Game>> { }
 
     public class GameGetAllHandler : IRequestHandler<GameGetAllRequest, List<Game>>
     {

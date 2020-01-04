@@ -12,22 +12,23 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.CQRS.Commands
 {
-    public class ScanForNewHostsRequest : IRequest
-    {
-    }
+    public class ScanForNewHostsRequest : IRequest { }
 
     public class ScanForNewHostsHandler : IRequestHandler<ScanForNewHostsRequest, Unit>
     {
         private readonly ILogger<ScanForNewHostsHandler> _logger;
+        private readonly IMediator _mediator;
         private readonly IRepository<Hoster> _hosterRepository;
         private readonly IBackgroundTaskProgressTracker _backgroundTaskProgressTracker;
 
         public ScanForNewHostsHandler(
             ILogger<ScanForNewHostsHandler> logger,
+            IMediator mediator,
             IRepository<Hoster> hosterRepository,
             IBackgroundTaskProgressTracker backgroundTaskProgressTracker)
         {
             _logger = logger;
+            _mediator = mediator;
             _hosterRepository = hosterRepository;
             _backgroundTaskProgressTracker = backgroundTaskProgressTracker;
         }
@@ -45,7 +46,7 @@ namespace GPI.Services.CQRS.Commands
 
             foreach (var hosterType in types)
             {
-                IBasicContentHost instance = (IBasicContentHost)Activator.CreateInstance(hosterType);
+                IBasicContentHost instance = await _mediator.Send(new HosterCreateFromTypeRequest(hosterType.ToString())); //(IBasicContentHost)Activator.CreateInstance(hosterType);
 
                 if (!currentHosters.Any(x => x.Id == instance.HosterIdentifier))
                 {

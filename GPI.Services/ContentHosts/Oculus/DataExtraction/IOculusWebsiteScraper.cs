@@ -2,6 +2,6 @@
 {
     public interface IOculusWebsiteScraper
     {
-        OculusWebsiteJson ScrapeDataForApplicationId(IWebView view, string appId);
+        //OculusWebsiteJson ScrapeDataForApplicationId(IWebView view, string appId);
     }
 }

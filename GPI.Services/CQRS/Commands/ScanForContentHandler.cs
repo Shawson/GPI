@@ -16,9 +16,7 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.CQRS.Commands
 {
-    public class ScanForContentRequest : IRequest
-    {
-    }
+    public class ScanForContentRequest : IRequest { }
 
     public class ScanForContentHandler : IRequestHandler<ScanForContentRequest, Unit>
     {
@@ -52,12 +50,12 @@ namespace GPI.Services.CQRS.Commands
 
             var completedHosters = 0;
 
-            foreach (var hosterDefintion in hosters)
+            foreach (var hosterDefinition in hosters)
             {
-                _logger.LogInformation($"Started hoster scan {hosterDefintion.TypeName}");
+                _logger.LogInformation($"Started hoster scan {hosterDefinition.TypeName}");
                 try
                 {
-                    var hoster = await GetHosterFromType(hosterDefintion);
+                    var hoster = await _mediator.Send(new HosterCreateFromTypeRequest(hosterDefinition.TypeName));
 
                     var games = await hoster.ScanForGames(cancellationToken);
 
@@ -90,7 +88,7 @@ namespace GPI.Services.CQRS.Commands
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Problem with hoster {hosterDefintion.TypeName} : {ex}");
+                    _logger.LogError($"Problem with hoster {hosterDefinition.TypeName} : {ex}");
                 }
 
                 completedHosters++;

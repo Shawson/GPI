@@ -13,12 +13,12 @@ namespace GPI.Services.ContentHosts.Oculus.DataExtraction
     {
         private readonly IRegistryValueProvider registryValueProvider;
         private readonly IPathNormaliser pathNormaliser;
-        private readonly ILogger<OculusPathSniffer> logger;
+        private readonly ILogger logger;
 
         public OculusPathSniffer(
             IRegistryValueProvider registryValueProvider,
             IPathNormaliser pathNormaliser,
-            ILogger<OculusPathSniffer> logger)
+            ILogger logger)
         {
             this.registryValueProvider = registryValueProvider;
             this.pathNormaliser = pathNormaliser;
@@ -29,7 +29,7 @@ namespace GPI.Services.ContentHosts.Oculus.DataExtraction
         {
             var libraryPaths = new List<string>();
 
-            logger.Debug($"Getting Oculus library locations from registry ({platformView})");
+            logger.LogDebug($"Getting Oculus library locations from registry ({platformView})");
 
             try
             {
@@ -39,7 +39,7 @@ namespace GPI.Services.ContentHosts.Oculus.DataExtraction
 
                 if (libraryKeyTitles == null || !libraryKeyTitles.Any())
                 {
-                    logger.Error("No libraries found");
+                    logger.LogError("No libraries found");
                     return null;
                 }
 
@@ -54,30 +54,30 @@ namespace GPI.Services.ContentHosts.Oculus.DataExtraction
                     {
                         libraryPath = pathNormaliser.Normalise(libraryPath);
                         libraryPaths.Add(libraryPath);
-                        logger.Debug($"Found library: {libraryPath}");
+                        logger.LogDebug($"Found library: {libraryPath}");
                     }
                 }
 
-                logger.Debug($"Libraries located: {libraryPaths.Count}");
+                logger.LogDebug($"Libraries located: {libraryPaths.Count}");
 
                 return libraryPaths;
             }
             catch (Exception ex)
             {
-                logger.Error($"Exception opening registry keys: {ex}");
+                logger.LogError($"Exception opening registry keys: {ex}");
                 return null;
             }
         }
 
         public List<string> GetOculusLibraryLocations()
         {
-            logger.Debug("Trying to get Oculus base path (REG64)");
+            logger.LogDebug("Trying to get Oculus base path (REG64)");
 
             var libraryLocations = GetOculusLibraryLocations(RegistryView.Registry64);
 
             if (libraryLocations == null)
             {
-                logger.Debug("Trying to get Oculus base path (REG32)");
+                logger.LogDebug("Trying to get Oculus base path (REG32)");
                 libraryLocations = GetOculusLibraryLocations(RegistryView.Registry32);
             }
 

@@ -21,7 +21,6 @@ namespace GPI.Services.ContentHosts.Oculus
 
         public string Title => "Oculus";
 
-        private readonly IOculusPathSniffer pathSniffer;
         private readonly IOculusWebsiteScraper _oculusScraper;
         private readonly IOculusPathSniffer _oculusPathSniffer;
         private readonly ILogger<OculusHost> _logger;
@@ -31,6 +30,13 @@ namespace GPI.Services.ContentHosts.Oculus
             _logger = logger;
             _oculusPathSniffer = oculusPathSniffer;
             _oculusScraper = oculusWebsiteScraper;
+        }
+
+        public OculusHost(ILogger<OculusHost> logger)
+        {
+            _logger = logger;
+            _oculusPathSniffer = new OculusPathSniffer(new RegistryValueProvider(), new PathNormaliser(new WMODriveQueryProvider()), logger);
+            _oculusScraper = new OculusWebsiteScraper(logger);
         }
 
         private List<OculusManifest> GetOculusAppManifests(string oculusBasePath)
@@ -90,7 +96,7 @@ namespace GPI.Services.ContentHosts.Oculus
 
             var gameInfos = new List<GameInfo>();
 
-            var oculusLibraryLocations = pathSniffer.GetOculusLibraryLocations();
+            var oculusLibraryLocations = _oculusPathSniffer.GetOculusLibraryLocations();
 
             if (oculusLibraryLocations == null || !oculusLibraryLocations.Any())
             {
@@ -98,7 +104,7 @@ namespace GPI.Services.ContentHosts.Oculus
                 return await Task.FromResult(gameInfos);
             }
 
-            using (var view = PlayniteApi.WebViews.CreateOffscreenView())
+            //using (var view = PlayniteApi.WebViews.CreateOffscreenView())
             {
                 foreach (var oculusBasePath in oculusLibraryLocations)
                 {
@@ -131,7 +137,7 @@ namespace GPI.Services.ContentHosts.Oculus
                                 backgroundImage = string.Empty;
                             }
 
-                            var scrapedData = _oculusScraper.ScrapeDataForApplicationId(view, manifest.AppId);
+                            OculusWebsiteJson scrapedData = null;// _oculusScraper.ScrapeDataForApplicationId(view, manifest.AppId);
 
                             if (scrapedData == null)
                             {
@@ -142,18 +148,10 @@ namespace GPI.Services.ContentHosts.Oculus
 
                             gameInfos.Add(new GameInfo
                             {
-                                Name = scrapedData?.Name ?? executableName,
-                                Description = scrapedData?.Description ?? string.Empty,
-                                GameId = manifest.AppId,
-                                PlayAction = new GameAction
-                                {
-                                    Type = GameActionType.File,
-                                    Path = executableFullPath,
-                                    Arguments = manifest.LaunchParameters
-                                },
-                                IsInstalled = true,
-                                Icon = icon,
-                                BackgroundImage = backgroundImage
+                                FileLocation = executableFullPath,
+                                PlatformId = DefaultPlatformIdentifier,
+                                DisplayTitle = scrapedData?.Name ?? Path.GetFileNameWithoutExtension(executableName),
+                                HosterContentIdentifier = manifest.AppId
                             });
 
                             _logger.LogInformation($"Completed manifest {manifest.CanonicalName} {manifest.AppId}");
@@ -178,7 +176,7 @@ namespace GPI.Services.ContentHosts.Oculus
 
         public void LoadSettingsFromJson(string jsonSettings)
         {
-            throw new NotImplementedException();
+            return;
         }
     }
 }

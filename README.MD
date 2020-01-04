@@ -1,1 +1,1 @@
-https://medium.com/swlh/building-a-nice-multi-layer-net-core-3-api-c68a9ef16368
+A locally hosted REST API exposing your installed games across all launchers.

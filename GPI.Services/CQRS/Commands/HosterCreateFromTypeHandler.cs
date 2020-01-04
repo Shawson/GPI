@@ -33,6 +33,11 @@ namespace GPI.Services.CQRS.Commands
             var hosterType = Type.GetType(request.TypeName, true);
             var hoster = (IBasicContentHost)_serviceProvider.AsSelf(hosterType);
 
+            if (hoster == null)
+            {
+                throw new Exception($"Unable to construct hoster for {request.TypeName}");
+            }
+
             var settingsJson = await _mediator.Send(new HosterFetchConfigRequest(request.TypeName));
             hoster.LoadSettingsFromJson(settingsJson);
             return hoster;

@@ -9,6 +9,7 @@ using GPI.Services.ContentHosts;
 using GPI.Services.CQRS.Commands;
 using GPI.Services.CQRS.Queries;
 using GPI.Services.FileSystem;
+using GPI.Services.OS;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -72,6 +73,8 @@ namespace GPI.Api
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(DbContext), typeof(GPIDbContext));
             services.AddScoped<IDirectoryShim, DirectoryShim>();
+            services.AddScoped<IFileShim, FileShim>();
+            services.AddScoped<IRegistryValueProvider, RegistryValueProvider>();
             services.AddScoped<IApplicationStartWorker, AppStartWorker>();
 
             services.AddAutoMapper(typeof(Startup));

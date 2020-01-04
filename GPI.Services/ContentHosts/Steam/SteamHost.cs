@@ -53,7 +53,8 @@ namespace GPI.Services.ContentHosts.Steam
             var games = new List<GameInfo>();
 
             _installationPath = _registry
-                    .GetValueForPath(Microsoft.Win32.RegistryView.Default, Microsoft.Win32.RegistryHive.CurrentUser, @"Software\Valve\Steam", "SteamPath");
+                    .GetValueForPath(Microsoft.Win32.RegistryView.Default, Microsoft.Win32.RegistryHive.CurrentUser, @"Software\Valve\Steam", "SteamPath")?
+                    .Replace("/", @"\");
 
             if (string.IsNullOrEmpty(_installationPath))
             {
@@ -127,7 +128,9 @@ namespace GPI.Services.ContentHosts.Steam
 
             var files = _directoryShim.GetFiles(path, false);
 
-            foreach (var file in files.Where(x => x.StartsWith(@"appmanifest")))
+            var manifestFileStart = Path.Combine(path, "appmanifest");
+
+            foreach (var file in files.Where(x => x.StartsWith(manifestFileStart)))
             {
                 try
                 {

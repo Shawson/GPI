@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace GPI.Services.OS
 {
-    public class PathNormaliser : IPathNormaliser
+    public class WMOPathNormaliser : IPathNormaliser
     {
         private static List<WMODrive> wmoVolumes;
         private static object locker = new object();
@@ -30,7 +30,7 @@ namespace GPI.Services.OS
             }
         }
 
-        public PathNormaliser(IWMODriveQueryProvider windowsManagementObjectQueryProvider)
+        public WMOPathNormaliser(IWMODriveQueryProvider windowsManagementObjectQueryProvider)
         {
             this.windowsManagementObjectDriveQueryProvider = windowsManagementObjectQueryProvider;
         }

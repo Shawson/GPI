@@ -12,9 +12,9 @@ namespace GPI.Services.ContentHosts.Oculus.DataExtraction
 {
     public class OculusWebsiteScraper : IOculusWebsiteScraper
     {
-        private readonly ILogger logger;
+        private readonly ILogger<OculusWebsiteScraper> logger;
 
-        public OculusWebsiteScraper(ILogger logger)
+        public OculusWebsiteScraper(ILogger<OculusWebsiteScraper> logger)
         {
 
             this.logger = logger;

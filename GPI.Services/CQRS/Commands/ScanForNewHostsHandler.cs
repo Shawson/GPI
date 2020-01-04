@@ -40,7 +40,7 @@ namespace GPI.Services.CQRS.Commands
             var type = typeof(IBasicContentHost);
             var types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .Where(p => p.GetInterfaces().Contains(type));
+                .Where(p => p.GetInterfaces().Contains(type) && !p.IsInterface && !p.IsAbstract);
 
             var currentHosters = await _hosterRepository.GetAllAsync().ToListAsync();
 

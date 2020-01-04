@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace GPI.Services.ContentHosts.Oculus
 {
+
     public class OculusHost : IBasicContentHost
     {
         public Guid HosterIdentifier => GuidHelper.Hosters.Oculus;
@@ -30,13 +31,6 @@ namespace GPI.Services.ContentHosts.Oculus
             _logger = logger;
             _oculusPathSniffer = oculusPathSniffer;
             _oculusScraper = oculusWebsiteScraper;
-        }
-
-        public OculusHost(ILogger<OculusHost> logger)
-        {
-            _logger = logger;
-            _oculusPathSniffer = new OculusPathSniffer(new RegistryValueProvider(), new PathNormaliser(new WMODriveQueryProvider()), logger);
-            _oculusScraper = new OculusWebsiteScraper(logger);
         }
 
         private List<OculusManifest> GetOculusAppManifests(string oculusBasePath)

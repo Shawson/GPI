@@ -13,12 +13,12 @@ namespace GPI.Services.ContentHosts.Oculus.DataExtraction
     {
         private readonly IRegistryValueProvider registryValueProvider;
         private readonly IPathNormaliser pathNormaliser;
-        private readonly ILogger logger;
+        private readonly ILogger<OculusPathSniffer> logger;
 
         public OculusPathSniffer(
             IRegistryValueProvider registryValueProvider,
             IPathNormaliser pathNormaliser,
-            ILogger logger)
+            ILogger<OculusPathSniffer> logger)
         {
             this.registryValueProvider = registryValueProvider;
             this.pathNormaliser = pathNormaliser;

@@ -17,8 +17,4 @@
     <ProjectReference Include="..\GPI.Data\GPI.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="OS\" />
-  </ItemGroup>
-
 </Project>

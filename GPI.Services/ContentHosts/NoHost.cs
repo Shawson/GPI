@@ -23,8 +23,6 @@ namespace GPI.Services.ContentHosts
 
         public string Title => "";
 
-        public NoHost() { }
-
         public NoHost(
             IDirectoryShim directory, 
             ILogger<NoHost> logger)

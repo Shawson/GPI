@@ -21,7 +21,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace GPI.Api
@@ -75,9 +77,24 @@ namespace GPI.Api
             services.AddScoped<IDirectoryShim, DirectoryShim>();
             services.AddScoped<IFileShim, FileShim>();
             services.AddScoped<IRegistryValueProvider, RegistryValueProvider>();
+            services.AddScoped<IPathNormaliser, WMOPathNormaliser>();
+            services.AddScoped<IWMODriveQueryProvider, WMODriveQueryProvider>();
             services.AddScoped<IApplicationStartWorker, AppStartWorker>();
 
             services.AddAutoMapper(typeof(Startup));
+
+            // find any third parties which have dependencies to register
+            var type = typeof(IDependencyRegistration);
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => p.GetInterfaces().Contains(type) && !p.IsInterface && !p.IsAbstract);
+
+            foreach(var registerType in types)
+            {
+                var toRegister = (IDependencyRegistration)Activator.CreateInstance(registerType);
+                toRegister.RegisterServices(services);
+            }
+
 
             services.AddMediatR(typeof(GameGetByIdHandler).GetTypeInfo().Assembly);
         }

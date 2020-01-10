@@ -37,9 +37,19 @@ namespace GPI.Api
         }
 
         public IConfiguration Configuration { get; }
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000");
+                });
+            });
+
             services.AddControllers();
 
             services.AddApiVersioning(
@@ -101,6 +111,8 @@ namespace GPI.Api
 
         public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider, IWebHostEnvironment env)
         {
+            app.UseCors(MyAllowSpecificOrigins);
+
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-3.1
             app.UseStaticFiles(new StaticFileOptions
             {
@@ -138,6 +150,8 @@ namespace GPI.Api
                         options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
                     }
                 });
+
+            
         }
 
         static string XmlCommentsFilePath
